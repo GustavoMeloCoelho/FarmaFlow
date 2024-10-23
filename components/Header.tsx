@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface HeaderProps {
@@ -13,7 +13,7 @@ const Header: React.FC<HeaderProps> = ({ imageUrl }) => {
     // Função para buscar o nome do usuário no async storage
     const fetchUserName = async () => {
       try {
-        const storedName = await AsyncStorage.getItem('userName');
+        const storedName = await AsyncStorage.getItem('@user_name');
         if (storedName) {
           setUserName(storedName);
         }

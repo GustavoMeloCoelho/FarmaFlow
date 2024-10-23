@@ -38,18 +38,6 @@ export default function Login({navigation}) {
     }, []);
 
 
-    // useEffect(() => {
-    //     // consulta o local storage
-    //     if(name) {
-    //         navigation.dispatch(
-    //             CommonActions.reset({
-    //               index: 0,
-    //               routes: [{ name: 'Home' }],
-    //             })
-    //           ); 
-    //     }
-    // }, [])
-
     function validateFields() {
         if (!email || !password) {
             Alert.alert("Erro", "Por favor, preencha todos os campos.");

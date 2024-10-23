@@ -11,7 +11,7 @@ export default function Home({ navigation }) {
     // Busca o nome do usuário no AsyncStorage
     useEffect(() => {
         async function fetchUserName() {
-            const storedName = await AsyncStorage.getItem('userName');
+            const storedName = await AsyncStorage.getItem('@user_name');
             if (storedName) {
                 setUserName(storedName);
             }
@@ -21,23 +21,19 @@ export default function Home({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* Header com foto e nome do usuário */}
-            <View style={styles.header}>
-                <Image
-                    source={{ uri: 'https://via.placeholder.com/50' }} // Substituir por imagem real
-                    style={styles.userImage}
-                />
-                <Text style={styles.greeting}>Olá, {userName}</Text>
-            </View>
-            <Header imageUrl='https://via.placeholder.com/50' />
+    
+
+            <Header imageUrl='https://i.pinimg.com/originals/8d/fd/37/8dfd372102d3e4a8102c5c928ce32047.jpg' />
+
+
 
             {/* Cards de Estoque e Usuários */}
             <View style={styles.cardsContainer}>
                 <View style={styles.card}>
                     <MaterialCommunityIcons
-                        name = 'bank'
-                        size = {55}
-                        color = '#1565C0'
+                        name='bank'
+                        size={55}
+                        color='#1565C0'
                     />
 
                     
@@ -72,11 +68,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#E3F2FD',
         padding: 20,
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 20,
     },
     userImage: {
         width: 50,
