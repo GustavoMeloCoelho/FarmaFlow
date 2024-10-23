@@ -47,7 +47,7 @@ export default function Home({ navigation }) {
 
                 <View style={styles.card}>
                     <MaterialCommunityIcons
-                        name='account-plus-outline'
+                        name='account-outline'
                         size={55}
                         color='#1565C0'
                     />
@@ -55,7 +55,7 @@ export default function Home({ navigation }) {
                     <TouchableOpacity
                         style={styles.cardButton}
                         onPress={() => navigation.navigate('UserRegistration')}>
-                        <Text style={styles.buttonText}>Cadastrar Usuários</Text>
+                        <Text style={styles.buttonText}>Ver e cadastrar Usuários</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -69,20 +69,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#E3F2FD',
         padding: 20,
     },
-    userImage: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        marginRight: 15,
-    },
-    greeting: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#2E7D32',
-    },
     cardsContainer: {
         flex: 1,
-        justifyContent: 'space-around',
+        // justifyContent: 'space-around',
     },
     card: {
         backgroundColor: '#FFFFFF',
@@ -93,8 +82,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowOffset: { width: 0, height: 2 },
         shadowRadius: 8,
-        elevation: 5,
-        marginBottom: 20,
+        elevation: 9,
+        marginBottom: 80,
     },
     cardTitle: {
         fontSize: 18,

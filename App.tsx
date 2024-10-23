@@ -6,6 +6,7 @@ import Home from './src/Home';
 import { PaperProvider } from 'react-native-paper';
 import Stock from './src/Stock';
 import UserRegistration from './src/UserRegistration';
+import UserList from './src/UserList';
 
 const Stack = createStackNavigator()
 
@@ -17,6 +18,7 @@ export default function App() {
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
           <Stack.Screen name="Stock" component={Stock} options={{ headerShown: false }}/>
+          <Stack.Screen name="UserList" component={UserList} options={{ headerShown: false }}/>
           <Stack.Screen name="UserRegistration" component={UserRegistration} options={{ headerShown: false }}/>
         </Stack.Navigator>
       </NavigationContainer>

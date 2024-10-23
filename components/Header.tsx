@@ -29,7 +29,7 @@ const Header: React.FC<HeaderProps> = ({ imageUrl }) => {
     <View style={styles.headerContainer}>
       <Image source={{ uri: imageUrl }} style={styles.profileImage} />
       <Text style={styles.greetingText}>
-        Olá {userName ? userName : 'Usuário'}
+        Olá, {userName ? userName : 'Usuário'}
       </Text>
     </View>
   );
@@ -40,12 +40,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
+    marginBottom: 80,
     backgroundColor: '#E3F2FD',
   },
   profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 110,
+    height: 110,
+    borderRadius: 55,
     marginRight: 10,
   },
   greetingText: {
