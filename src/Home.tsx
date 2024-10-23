@@ -54,7 +54,7 @@ export default function Home({ navigation }) {
                     <Text style={styles.cardTitle}>Usuários</Text>
                     <TouchableOpacity
                         style={styles.cardButton}
-                        onPress={() => navigation.navigate('UserRegistration')}>
+                        onPress={() => navigation.navigate('UserList')}>
                         <Text style={styles.buttonText}>Ver e cadastrar Usuários</Text>
                     </TouchableOpacity>
                 </View>
