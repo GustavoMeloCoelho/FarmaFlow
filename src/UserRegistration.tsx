@@ -6,19 +6,49 @@ import axios from 'axios';
 export default function UserRegistration() {
     const [profile, setProfile] = useState('motorista');
     const [name, setName] = useState('');
-    const [cpfOrCnpj, setCpfOrCnpj] = useState('');
-    const [address, setAddress] = useState('');
+    const [document, setDocument] = useState('');
+    const [full_address, setFullAddress] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    const handleRegister = () => {
+    const handleRegister = async() => {
+
+        //validações básicas
+        if (!name || !document || !full_address || !email || !password || !confirmPassword) {
+            Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+            return;
+        }
         if (password !== confirmPassword) {
             Alert.alert('Erro', 'As senhas não coincidem.');
             return;
-        }
-        // Lógica para registrar o usuário
-        Alert.alert('Sucesso', 'Usuário cadastrado com sucesso!');
+        }   
+
+        //construção do JSON
+        const userData = {
+            profile, // motorista ou filial
+            name,
+            document,
+            full_address,
+            email,
+            password,
+          };
+
+          try {
+            // Enviar requisição POST
+            await axios.post(process.env.EXPO_PUBLIC_API_URL + '/register', userData);
+            Alert.alert('Sucesso', 'Usuário cadastrado com sucesso.');
+            setName('');
+            setDocument('');
+            setFullAddress('');
+            setEmail('');
+            setPassword('');
+            setConfirmPassword('');
+            
+          } catch (error) {
+            Alert.alert('Erro', 'Ocorreu um erro ao cadastrar o usuário.');
+            console.error(error);
+          }
     };
 
 
@@ -56,15 +86,15 @@ export default function UserRegistration() {
             <TextInput
                 style={styles.input}
                 placeholder={profile === 'motorista' ? 'CPF' : 'CNPJ'}
-                value={cpfOrCnpj}
-                onChangeText={setCpfOrCnpj}
+                value={document}
+                onChangeText={setDocument}
                 keyboardType="numeric"
             />
             <TextInput
                 style={styles.input}
                 placeholder="Endereço completo"
-                value={address}
-                onChangeText={setAddress}
+                value={full_address}
+                onChangeText={setFullAddress}
             />
             <TextInput
                 style={styles.input}
