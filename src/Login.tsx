@@ -18,6 +18,7 @@ export default function Login({navigation}) {
     useEffect(() => {
         const checkLoginStatus = async () => {
             try {
+                // voltar depois que terminar as outras telas
                 const name = await AsyncStorage.getItem('@user_name');
                 if (name !== null) {
                     // Usuário já está logado, redirecione para a tela Home
