@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { SafeAreaView } from "react-native-safe-area-context";
 import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';
 
@@ -9,8 +10,10 @@ interface Branch {
 }
 
 interface Product {
+  product_id: number;
   product_name: string;
   quantity: number;
+  branch_name: string;
 }
 
 interface BranchSelection {
@@ -21,8 +24,8 @@ interface BranchSelection {
 const MovementRegistration = ({ navigation }) => {
   const [branches, setBranches] = useState<Branch[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
-  const [originBranch, setOriginBranch] = useState<string | null>(null);
-  const [destinationBranch, setDestinationBranch] = useState<BranchSelection[]>([]);
+  const [originBranch, setOriginBranch] = useState<number | null>(null);
+  const [destinationBranch, setDestinationBranch] = useState<number | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<number | null>(null);
   const [quantity, setQuantity] = useState('');
   const [observations, setObservations] = useState('');
@@ -33,7 +36,7 @@ const MovementRegistration = ({ navigation }) => {
     const fetchOptions = async () => {
       try {
         const branchesResponse = await axios.get(process.env.EXPO_PUBLIC_API_URL + '/branches/options');
-        const productsResponse = await axios.get(process.env.EXPO_PUBLIC_API_URL + '/products');
+        const productsResponse = await axios.get(process.env.EXPO_PUBLIC_API_URL + '/products/options');
         setBranches(branchesResponse.data);
         setProducts(productsResponse.data);
       } catch (error) {
@@ -44,13 +47,12 @@ const MovementRegistration = ({ navigation }) => {
   }, []);
 
  
-  // Update product stock when a product is selected
-useEffect(() => {
-  if (selectedProduct) {
-    const product = products.find(p => String(p.product_name) === String(selectedProduct));
-    setProductStock(product ? product.quantity : 0);
-  }
-}, [selectedProduct, products]); 
+  useEffect(() => {
+    if (selectedProduct) {
+      const product = products.find(p => p.product_id === Number(selectedProduct));
+      setProductStock(product ? product.quantity : 0);
+    }
+  }, [selectedProduct, products]);
 
   // Validation and submit handler
   const handleRegister = async () => {
@@ -67,7 +69,10 @@ useEffect(() => {
     try {
 
       
-      const selectedProductData = products.find(p => p.product_name === String(selectedProduct));
+      const selectedProductData = products.find(p => p.product_id === selectedProduct);
+
+      
+
 
       if (!selectedProductData) {
         Alert.alert('Erro', 'Produto selecionado não encontrado.');
@@ -75,17 +80,17 @@ useEffect(() => {
       }
 
       const payload = {
-        originBranch, // Agora o nome da filial de origem
-        destinationBranch, // Agora o nome da filial de destino
-        productName: selectedProduct,
+        originBranchId: originBranch,
+        destinationBranchId: destinationBranch,
+        productId: selectedProduct,
         quantity: parseInt(quantity),
-        observations,
+        // observations,
       };
 
       console.log('Payload being sent:', payload); 
       await axios.post(process.env.EXPO_PUBLIC_API_URL + '/movements', payload);
       Alert.alert('Sucesso', 'Movimentação cadastrada com sucesso.');
-      navigation.goBack(); // Volta para a lista de movimentações
+      // navigation.goBack(); // Voltar para a lista de movimentações
     } catch (error) {
       if (error.response && error.response.status === 400 && error.response.data.message === 'estoque insuficiente') {
         Alert.alert('Erro', 'Estoque insuficiente para o produto selecionado.');
@@ -101,22 +106,22 @@ useEffect(() => {
       <Text style={styles.label}>Filial de Origem</Text>
       <Picker
         selectedValue={originBranch}
-        onValueChange={itemValue => setOriginBranch(itemValue)}
+        onValueChange={(itemValue) => setOriginBranch(itemValue as number)}
         style={styles.picker}
       >
         {branches.map(branch => (
-          <Picker.Item key={branch.id.toString()} label={branch.name} value={branch.name} />
+          <Picker.Item key={branch.id.toString()} label={branch.name} value={branch.id} />
         ))}
       </Picker>
 
       <Text style={styles.label}>Filial de Destino</Text>
       <Picker
         selectedValue={destinationBranch}
-        onValueChange={itemValue => setDestinationBranch(itemValue)}
+        onValueChange={(itemValue) => setDestinationBranch(itemValue as number)}
         style={styles.picker}
       >
         {branches.map(branch => (
-          <Picker.Item key={branch.id.toString()} label={branch.name} value={branch.name} /> // Usa o nome como valor
+          <Picker.Item key={branch.id.toString()} label={branch.name} value={branch.id} />
         ))}
       </Picker>
 
@@ -126,8 +131,8 @@ useEffect(() => {
         onValueChange={itemValue => setSelectedProduct(itemValue)}
         style={styles.picker}
       >
-        {products.map((product, index) => (
-          <Picker.Item key={index} label={product.product_name} value={product.product_name} />
+        {products.map(product => (
+          <Picker.Item key={product.product_id.toString()} label={product.product_name} value={product.product_id} />
         ))}
       </Picker>
 
