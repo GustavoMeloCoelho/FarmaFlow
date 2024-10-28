@@ -1,15 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { SafeAreaView, View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
+interface Branch {
+  id: number;
+  name: string;
+}
+
+interface Product {
+  product_name: string;
+  quantity: number;
+}
+
+interface BranchSelection {
+  id: number | null;
+  name: string | null;
+}
 
 const MovementRegistration = ({ navigation }) => {
-  const [branches, setBranches] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [originBranch, setOriginBranch] = useState('');
-  const [destinationBranch, setDestinationBranch] = useState('');
-  const [selectedProduct, setSelectedProduct] = useState('');
+  const [branches, setBranches] = useState<Branch[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [originBranch, setOriginBranch] = useState<string | null>(null);
+  const [destinationBranch, setDestinationBranch] = useState<BranchSelection[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<number | null>(null);
   const [quantity, setQuantity] = useState('');
   const [observations, setObservations] = useState('');
   const [productStock, setProductStock] = useState(0);
@@ -19,7 +33,7 @@ const MovementRegistration = ({ navigation }) => {
     const fetchOptions = async () => {
       try {
         const branchesResponse = await axios.get(process.env.EXPO_PUBLIC_API_URL + '/branches/options');
-        const productsResponse = await axios.get(process.env.EXPO_PUBLIC_API_URL + '/products/options');
+        const productsResponse = await axios.get(process.env.EXPO_PUBLIC_API_URL + '/products');
         setBranches(branchesResponse.data);
         setProducts(productsResponse.data);
       } catch (error) {
@@ -29,13 +43,14 @@ const MovementRegistration = ({ navigation }) => {
     fetchOptions();
   }, []);
 
+ 
   // Update product stock when a product is selected
-  useEffect(() => {
-    if (selectedProduct) {
-      const product = products.find(p => p.id === selectedProduct);
-      setProductStock(product ? product.stock : 0);
-    }
-  }, [selectedProduct]);
+useEffect(() => {
+  if (selectedProduct) {
+    const product = products.find(p => String(p.product_name) === String(selectedProduct));
+    setProductStock(product ? product.quantity : 0);
+  }
+}, [selectedProduct, products]); 
 
   // Validation and submit handler
   const handleRegister = async () => {
@@ -50,14 +65,24 @@ const MovementRegistration = ({ navigation }) => {
     }
 
     try {
+
+      
+      const selectedProductData = products.find(p => p.product_name === String(selectedProduct));
+
+      if (!selectedProductData) {
+        Alert.alert('Erro', 'Produto selecionado não encontrado.');
+        return;
+      }
+
       const payload = {
-        originBranch,
-        destinationBranch,
-        productId: selectedProduct,
+        originBranch, // Agora o nome da filial de origem
+        destinationBranch, // Agora o nome da filial de destino
+        productName: selectedProduct,
         quantity: parseInt(quantity),
         observations,
       };
 
+      console.log('Payload being sent:', payload); 
       await axios.post(process.env.EXPO_PUBLIC_API_URL + '/movements', payload);
       Alert.alert('Sucesso', 'Movimentação cadastrada com sucesso.');
       navigation.goBack(); // Volta para a lista de movimentações
@@ -80,7 +105,7 @@ const MovementRegistration = ({ navigation }) => {
         style={styles.picker}
       >
         {branches.map(branch => (
-          <Picker.Item key={branch.id} label={branch.name} value={branch.id} />
+          <Picker.Item key={branch.id.toString()} label={branch.name} value={branch.name} />
         ))}
       </Picker>
 
@@ -91,7 +116,7 @@ const MovementRegistration = ({ navigation }) => {
         style={styles.picker}
       >
         {branches.map(branch => (
-          <Picker.Item key={branch.id} label={branch.name} value={branch.id} />
+          <Picker.Item key={branch.id.toString()} label={branch.name} value={branch.name} /> // Usa o nome como valor
         ))}
       </Picker>
 
@@ -101,8 +126,8 @@ const MovementRegistration = ({ navigation }) => {
         onValueChange={itemValue => setSelectedProduct(itemValue)}
         style={styles.picker}
       >
-        {products.map(product => (
-          <Picker.Item key={product.id} label={product.name} value={product.id} />
+        {products.map((product, index) => (
+          <Picker.Item key={index} label={product.product_name} value={product.product_name} />
         ))}
       </Picker>
 
