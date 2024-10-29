@@ -16,10 +16,6 @@ interface Product {
   branch_name: string;
 }
 
-interface BranchSelection {
-  id: number | null;
-  name: string | null;
-}
 
 const MovementRegistration = ({ navigation }) => {
   const [branches, setBranches] = useState<Branch[]>([]);
@@ -30,6 +26,8 @@ const MovementRegistration = ({ navigation }) => {
   const [quantity, setQuantity] = useState('');
   const [observations, setObservations] = useState('');
   const [productStock, setProductStock] = useState(0);
+
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
   // Fetch branches and products on screen load
   useEffect(() => {
@@ -54,6 +52,18 @@ const MovementRegistration = ({ navigation }) => {
     }
   }, [selectedProduct, products]);
 
+  //Filtra o picker de produto para conter apenas os produtos que tem naquela filial
+  useEffect(() => {
+    if (originBranch !== null) {
+      const productsInBranch = products.filter(product => 
+        branches.find(branch => branch.id === originBranch)?.name === product.branch_name 
+      );
+      setFilteredProducts(productsInBranch); 
+      setSelectedProduct(null); 
+      setProductStock(0);        
+    }
+  }, [originBranch, products, branches]); 
+
   // Validation and submit handler
   const handleRegister = async () => {
     if (originBranch === destinationBranch) {
@@ -68,31 +78,22 @@ const MovementRegistration = ({ navigation }) => {
 
     try {
 
-      
-      const selectedProductData = products.find(p => p.product_id === selectedProduct);
-
-      
-
-
-      if (!selectedProductData) {
-        Alert.alert('Erro', 'Produto selecionado não encontrado.');
-        return;
-      }
 
       const payload = {
         originBranchId: originBranch,
         destinationBranchId: destinationBranch,
         productId: selectedProduct,
         quantity: parseInt(quantity),
-        // observations,
       };
 
       console.log('Payload being sent:', payload); 
       await axios.post(process.env.EXPO_PUBLIC_API_URL + '/movements', payload);
       Alert.alert('Sucesso', 'Movimentação cadastrada com sucesso.');
-      // navigation.goBack(); // Voltar para a lista de movimentações
+      // Atualiza o estoque disponível após cadastro de movimentação bem-sucedida
+      setProductStock(prevStock => prevStock - parseInt(quantity));
+
     } catch (error) {
-      if (error.response && error.response.status === 400 && error.response.data.message === 'estoque insuficiente') {
+      if (axios.isAxiosError(error) && error.response && error.response.status === 400 && error.response.data.message === 'estoque insuficiente') {
         Alert.alert('Erro', 'Estoque insuficiente para o produto selecionado.');
       } else {
         console.error('Error registering movement:', error);
@@ -109,6 +110,7 @@ const MovementRegistration = ({ navigation }) => {
         onValueChange={(itemValue) => setOriginBranch(itemValue as number)}
         style={styles.picker}
       >
+        <Picker.Item label="Selecione uma filial de origem" value={null} />
         {branches.map(branch => (
           <Picker.Item key={branch.id.toString()} label={branch.name} value={branch.id} />
         ))}
@@ -119,7 +121,9 @@ const MovementRegistration = ({ navigation }) => {
         selectedValue={destinationBranch}
         onValueChange={(itemValue) => setDestinationBranch(itemValue as number)}
         style={styles.picker}
-      >
+        
+      > 
+        <Picker.Item label="Selecione uma filial de destino" value={null} />
         {branches.map(branch => (
           <Picker.Item key={branch.id.toString()} label={branch.name} value={branch.id} />
         ))}
@@ -131,7 +135,8 @@ const MovementRegistration = ({ navigation }) => {
         onValueChange={itemValue => setSelectedProduct(itemValue)}
         style={styles.picker}
       >
-        {products.map(product => (
+        
+        {filteredProducts.map(product => (
           <Picker.Item key={product.product_id.toString()} label={product.product_name} value={product.product_id} />
         ))}
       </Picker>
