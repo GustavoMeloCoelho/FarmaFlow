@@ -36,6 +36,13 @@ const UserList = ({ navigation }) => {
         try {
             const url = `${process.env.EXPO_PUBLIC_API_URL}/users/${id}/toggle-status`;
             await axios.patch(url);
+            // setUsers(
+            //     users.map((user) => {
+            //       if(Number(user.id) === Number(item)) {
+            //           return { ...user, status: !user.status}
+            //       }
+            //            return user
+            //   }))
             setUsers((prevUsers) =>
                 prevUsers.map((user) =>
                     user.id === id ? { ...user, status: !user.status } : user
