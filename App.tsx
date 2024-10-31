@@ -10,8 +10,10 @@ import UserList from './src/UserList';
 import MovementRegistration from './src/MovementRegistration';
 import MovementList from './src/MovementList';
 import MovementListForDriver from './src/MovementListForDriver';
+import MapScreen from './src/MapScreen';
 
 const Stack = createStackNavigator()
+
 
 export default function App() {
   return (
@@ -26,6 +28,7 @@ export default function App() {
           <Stack.Screen name="MovementRegistration" component={MovementRegistration} options={{ headerShown: false }}/>
           <Stack.Screen name="MovementList" component={MovementList} options={{ headerShown: false }}/>
           <Stack.Screen name="MovementListForDriver" component={MovementListForDriver} options={{ headerShown: false }}/>
+          <Stack.Screen name="MapScreen" component={MapScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

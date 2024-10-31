@@ -141,12 +141,22 @@ const MovementDriverScreen = ({ navigation }) => {
         <Text style={styles.cardText}>Status: {item.status}</Text>
         
         {item.status === 'created' && (
-          <TouchableOpacity
+          <>
+            <TouchableOpacity
             style={styles.startButton}
             onPress={() => handleStartDelivery(item.id)}
           >
             <Text style={styles.buttonText}>Iniciar Entrega</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+              style={styles.mapButton}
+              onPress={() => navigation.navigate('MapScreen', { origin: item.origem, destination: item.destino })}
+            >
+              <Text style={styles.buttonText}>Ver Mapa</Text>
+            </TouchableOpacity>
+          </>
+          
+          
         )}
 
         {item.status === 'em transito' && (
@@ -166,14 +176,7 @@ const MovementDriverScreen = ({ navigation }) => {
           </>
         )}
 
-        {item.status === 'em transito' && (
-          <TouchableOpacity
-            style={styles.mapButton}
-            onPress={() => navigation.navigate('MapScreen', { origin: item.origem, destination: item.destino })}
-          >
-            <Text style={styles.buttonText}>Ver Mapa</Text>
-          </TouchableOpacity>
-        )}
+        
       </View>
     );
   };
@@ -216,13 +219,13 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   awaitingCollection: {
-    backgroundColor: '#D3D3D3', // Fundo cinza para "Aguardando Coleta"
+    backgroundColor: '#D3D3D3', 
   },
   inTransit: {
-    backgroundColor: '#FFAB91', // Fundo salmão para "Em Trânsito"
+    backgroundColor: '#FFAB91', 
   },
   collectionCompleted: {
-    backgroundColor: '#81C784', // Fundo salmão para "Coleta Finalizada"
+    backgroundColor: '#81C784', 
   },
   productImage: {
     width: 100,
@@ -243,14 +246,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   endButton: {
-    backgroundColor: '#FF6347',
+    backgroundColor: '#E5533D',
     padding: 10,
     borderRadius: 8,
     marginTop: 10,
     alignItems: 'center',
   },
   mapButton: {
-    backgroundColor: '#1565C0',
+    backgroundColor: '#42A5F5',
     padding: 10,
     borderRadius: 8,
     marginTop: 10,
