@@ -9,6 +9,7 @@ import UserRegistration from './src/UserRegistration';
 import UserList from './src/UserList';
 import MovementRegistration from './src/MovementRegistration';
 import MovementList from './src/MovementList';
+import MovementListForDriver from './src/MovementListForDriver';
 
 const Stack = createStackNavigator()
 
@@ -16,7 +17,7 @@ export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName='MovementList'>
+        <Stack.Navigator initialRouteName='MovementListForDriver'>
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
           <Stack.Screen name="Stock" component={Stock} options={{ headerShown: false }}/>
@@ -24,6 +25,7 @@ export default function App() {
           <Stack.Screen name="UserRegistration" component={UserRegistration} options={{ headerShown: false }}/>
           <Stack.Screen name="MovementRegistration" component={MovementRegistration} options={{ headerShown: false }}/>
           <Stack.Screen name="MovementList" component={MovementList} options={{ headerShown: false }}/>
+          <Stack.Screen name="MovementListForDriver" component={MovementListForDriver} options={{ headerShown: false }}/>
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
