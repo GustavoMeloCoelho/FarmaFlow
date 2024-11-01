@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MaterialCommunityIcons} from '@expo/vector-icons'
 import Header from '../components/Header'; 
 
-export default function Home({ navigation }) {
+export default function Home({ navigation }:any) {
     const [userName, setUserName] = useState('');
 
     // Busca o nome do usuário no AsyncStorage
@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
     },
     cardsContainer: {
         flex: 1,
-        // justifyContent: 'space-around',
     },
     card: {
         backgroundColor: '#FFFFFF',
@@ -111,11 +110,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     logoutButton: {
-        backgroundColor: '#B0BEC5', // Cor do botão de logout
+        backgroundColor: '#26A69A', 
         paddingVertical: 10,
         borderRadius: 8,
         alignItems: 'center',
-        marginBottom: 30, // Margem para separação
+        marginBottom: 30, 
 
     },
 });

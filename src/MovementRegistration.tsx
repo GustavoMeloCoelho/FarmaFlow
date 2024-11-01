@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TextInput } from 'react-native-paper';
+
 
 interface Branch {
   id: number;
@@ -18,7 +19,7 @@ interface Product {
 }
 
 
-const MovementRegistration = ({ navigation }) => {
+const MovementRegistration = () => {
   const [branches, setBranches] = useState<Branch[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [originBranch, setOriginBranch] = useState<number | null>(null);
@@ -107,6 +108,7 @@ const MovementRegistration = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
 
+      <Text style={styles.header}>Cadastro de movimentações</Text>
       <Text style={styles.label}>Filial de Origem</Text>
       <Picker
         selectedValue={originBranch}
@@ -147,6 +149,7 @@ const MovementRegistration = ({ navigation }) => {
       <Text style={styles.label}>Quantidade Disponível: {productStock}</Text>
       <TextInput
         placeholder="Quantidade"
+        mode="outlined"
         keyboardType="numeric"
         value={quantity}
         onChangeText={setQuantity}
@@ -156,13 +159,17 @@ const MovementRegistration = ({ navigation }) => {
       <Text style={styles.label}>Observações</Text>
       <TextInput
         placeholder="Observações"
+        mode="outlined"
         multiline
         value={observations}
         onChangeText={setObservations}
         style={[styles.input, styles.textArea]}
       />
 
-      <Button title="Cadastrar" onPress={handleRegister} />
+      {/* <Button  title="Cadastrar" onPress={handleRegister} /> */}
+      <TouchableOpacity style={styles.button} onPress={() => handleRegister()}>
+        <Text style={styles.buttonText}>Adicionar Nova Movimentação</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -171,15 +178,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: '#E3F2FD',
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginVertical: 21,
+    color: '#1565C0',
   },
   label: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 8,
+    marginTop: 15,
   },
   picker: {
     height: 50,
     marginBottom: 16,
+    backgroundColor: 'white',
   },
   input: {
     height: 40,
@@ -191,7 +208,13 @@ const styles = StyleSheet.create({
   textArea: {
     height: 100,
   },
-
+  button: {
+    backgroundColor: '#1565C0',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 16,
+  },
   buttonText: {
     color: '#fff',
     fontSize: 16,

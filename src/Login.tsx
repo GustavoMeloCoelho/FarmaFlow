@@ -8,7 +8,7 @@ import LottieView from 'lottie-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import { EXPO_PUBLIC_API_URL } from '@env';
 
-export default function Login({navigation}) {
+export default function Login({navigation}:any) {
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -188,7 +188,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#E3F2FD',
-        // backgroundColor: '#F5F5F5',
         padding: 20,
     },
     title: {
@@ -235,10 +234,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         height: 50,
        
-    },
-    errorText: {
-        color: '#FF9800',
-        marginTop: 10,
     },
   });
 
