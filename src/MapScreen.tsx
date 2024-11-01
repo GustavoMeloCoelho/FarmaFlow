@@ -3,11 +3,15 @@ import { View, StyleSheet, Dimensions } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
+import { RootStackParamList } from './types';
 
-export type RootStackParamList = {
-    MapScreen: { origin: { latitude: number; longitude: number }; destination: { latitude: number; longitude: number } };
+const Stack = createStackNavigator<RootStackParamList>();
+
+// export type RootStackParamList = {
+//     MapScreen: { origin: { latitude: number; longitude: number }; destination: { latitude: number; longitude: number } };
     
-  };
+//   };
 
   
 // interface Location {
@@ -20,9 +24,9 @@ export type RootStackParamList = {
 //   }
 
 type MapScreenProps = {
-    route: RouteProp<RootStackParamList, 'MapScreen'>;
-    navigation: StackNavigationProp<RootStackParamList, 'MapScreen'>;
-  };
+  route: RouteProp<RootStackParamList, 'MapScreen'>;
+  navigation: StackNavigationProp<RootStackParamList, 'MapScreen'>;
+};
 
 
 

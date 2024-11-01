@@ -1,43 +1,57 @@
 import { CommonActions } from "@react-navigation/native";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Text, StyleSheet, View, TouchableOpacity, Alert } from "react-native";
+import { Text, StyleSheet, View, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput, Button } from 'react-native-paper';
 import LottieView from 'lottie-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { EXPO_PUBLIC_API_URL } from '@env';
 
-export default function Login({navigation}:any) {
 
+
+
+export default function Login({ navigation }: any) {
+    const [loading, setLoading] = useState(false); 
     const [showPassword, setShowPassword] = useState(false);
-
-    const [email, setEmail] = useState('')
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     useEffect(() => {
         const checkLoginStatus = async () => {
             try {
-                // voltar depois que terminar as outras telas
                 const name = await AsyncStorage.getItem('@user_name');
                 if (name !== null) {
-                    // Usuário já está logado, redirecione para a tela Home
-                    navigation.dispatch(
-                        CommonActions.reset({
-                            index: 0,
-                            routes: [{ name: 'Home' }],
-                        })
-                    );
+                    // Redireciona com base no perfil do usuário
+                    if (name === "admin") {
+                        navigation.dispatch(
+                            CommonActions.reset({
+                                index: 0,
+                                routes: [{ name: 'Home' }],
+                            })
+                        );
+                    } else if (name === 'filial') {
+                        navigation.dispatch(
+                            CommonActions.reset({
+                                index: 0,
+                                routes: [{ name: 'MovementList' }],
+                            })
+                        );
+                    } else if (name === 'motorista') {
+                        navigation.dispatch(
+                            CommonActions.reset({
+                                index: 0,
+                                routes: [{ name: 'MovementListForDriver' }],
+                            })
+                        );
+                    }
                 }
             } catch (e) {
                 console.error("Erro ao verificar login", e);
-                Alert.alert("Erro ao ver login");
+                Alert.alert("Erro ao verificar login");
             }
         };
-    
         checkLoginStatus();
     }, []);
-
 
     function validateFields() {
         if (!email || !password) {
@@ -47,119 +61,84 @@ export default function Login({navigation}:any) {
         return true;
     }
 
-    function handleLogin() {
-
+    async function handleLogin() {
         if (!validateFields()) {
             return;
         }
-        console.log("entrei na login")
-        // navigation.navigate('Home');
 
-        axios.post(process.env.EXPO_PUBLIC_API_URL + '/login', {
-            email: email,
-            password: password
-            // email: 'admin@gmail.com',
-            // password: '123456'
-        })
-        .then(async (response) => {
-            console.log("cai no then")
-            if(response.data.profile === "admin") { 
-                
+        setLoading(true);
+
+        // Adiciona um delay de 2 segundos antes de iniciar a requisição (simulando uma demora no login)
+        setTimeout(() => {
+            axios.post(process.env.EXPO_PUBLIC_API_URL + '/login', {
+                email: email,
+                password: password
+            })
+            .then(async (response) => {
                 const { name, profile } = response.data;
                 try {
                     await AsyncStorage.setItem('@user_name', name);
                     await AsyncStorage.setItem('@user_profile', profile);
-                    console.log("Dados do usuário salvos no AsyncStorage");
-                    
                 } catch (e) {
                     console.error("Erro ao salvar dados do usuário", e);
                 }
 
-                // navigation.navigate('Home')
-                navigation.dispatch(
-                    CommonActions.reset({
-                      index: 0,
-                      routes: [{ name: 'Home' }],
-                    })
-                  );
+                setLoading(false);
 
-            } 
-            else if(response.data.profile === 'filial') {
-                // navegue tela movimentao
-                
-                const { name, profile } = response.data;
-                try {
-                    await AsyncStorage.setItem('@user_name', name);
-                    await AsyncStorage.setItem('@user_profile', profile);
-                    console.log("Dados do usuário salvos no AsyncStorage");
-                    
-                } catch (e) {
-                    console.error("Erro ao salvar dados do usuário", e);
+                // Redireciona com base no perfil do usuário
+                if (profile === "admin") {
+                    navigation.dispatch(
+                        CommonActions.reset({
+                            index: 0,
+                            routes: [{ name: 'Home' }],
+                        })
+                    );
+                } else if (profile === 'filial') {
+                    navigation.dispatch(
+                        CommonActions.reset({
+                            index: 0,
+                            routes: [{ name: 'MovementList' }],
+                        })
+                    );
+                } else if (profile === 'motorista') {
+                    navigation.dispatch(
+                        CommonActions.reset({
+                            index: 0,
+                            routes: [{ name: 'MovementListForDriver' }],
+                        })
+                    );
                 }
-
-                
-                navigation.dispatch(
-                    CommonActions.reset({
-                      index: 0,
-                      routes: [{ name: 'MovementList' }],
-                    })
-                  );
-            } else if(response.data.profile === 'motorista'){
-                // navegue tela movimentacao dos motorista
-                
-                const { name, profile } = response.data;
-                try {
-                    await AsyncStorage.setItem('@user_name', name);
-                    await AsyncStorage.setItem('@user_profile', profile);
-                    console.log("Dados do usuário salvos no AsyncStorage");
-                    
-                } catch (e) {
-                    console.error("Erro ao salvar dados do usuário", e);
-                }
-
-               
-                navigation.dispatch(
-                    CommonActions.reset({
-                      index: 0,
-                      routes: [{ name: 'MovementListForDriver' }],
-                    })
-                  );
-            }
-        })
-        .catch(() => {
-            console.log("caiu no catch")
-            Alert.alert("Usuário ou senha incorreto")
-        })
+            })
+            .catch(() => {
+                setLoading(false);
+                Alert.alert("Usuário ou senha incorreto");
+            });
+        }, 2000); // Define o delay em 2 segundos
     }
 
     return (
         <SafeAreaView style={styles.container}>
-            
-            <Text style={styles.title}>
-                FarmaFlow
-            </Text>
-
+            <Text style={styles.title}>FarmaFlow</Text>
             <LottieView
                 source={require('../assets/login-animation2.json')}
                 autoPlay
                 loop
                 style={styles.animation}
             />
-            <View style = {styles.inputContainer}>
+            <View style={styles.inputContainer}>
                 <TextInput
                     label="Email"
                     mode="outlined"
-                    textColor='black'
+                    textColor="black"
                     style={styles.input}
-                    onChangeText={text => setEmail(text)}
+                    onChangeText={(text) => setEmail(text)}
                 />
-
                 <TextInput
                     label="Senha"
                     mode="outlined"
-                    secureTextEntry = {!showPassword}
+                    secureTextEntry={!showPassword}
                     style={styles.input}
-                    onChangeText={text => setPassword(text)}
+                    onChangeText={(text) => setPassword(text)}
                 />
                 <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                     <Text style={styles.showPasswordText}>
@@ -167,20 +146,24 @@ export default function Login({navigation}:any) {
                     </Text>
                 </TouchableOpacity>
             </View>
-            
- 
-            <Button
-                mode="contained"
-                style={styles.button}
-                buttonColor='#1565C0'
-                textColor='#FFFFFF'
-                onPress={() => handleLogin()}>
-                <Text style={styles.buttonText}>Entrar</Text>
-            </Button>
-        </SafeAreaView>
 
-    )
-};
+            {loading ? (
+                <ActivityIndicator size="large" color="#1565C0" />
+            ) : (
+                <Button
+                    mode="contained"
+                    style={styles.button}
+                    buttonColor="#1565C0"
+                    textColor="#FFFFFF"
+                    onPress={handleLogin}
+                >
+                    <Text style={styles.buttonText}>Entrar</Text>
+                </Button>
+            )}
+        </SafeAreaView>
+    );
+}
+
 
 const styles = StyleSheet.create({
     container: {

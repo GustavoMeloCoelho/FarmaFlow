@@ -3,7 +3,7 @@ import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Image } fro
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
-import Header from '../components/Header'; 
+import Header from '../components/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Movement {
@@ -46,9 +46,9 @@ const MovementList = ({ navigation }: any) => {
           console.error('Erro ao buscar movimentações:', error);
         }
       };
-  
+
       fetchMovements(); // Buscar movimentações ao focar na tela
-  
+
       // Limpeza opcional, caso precise remover efeitos ou assinaturas ao desfocar a tela
       return () => {
         // Limpeza ou código adicional ao desfocar, se necessário
@@ -57,17 +57,29 @@ const MovementList = ({ navigation }: any) => {
   );
 
   // Render each movement as a card
-  const renderMovement = ({ item }: { item: Movement }) => (
-    <View style={styles.card}>
-      {/* Exibir a imagem do produto */}
-      <Image source={{ uri: item.produto.imagem }} style={styles.productImage} />
-      <Text style={styles.cardText}>Produto: {item.produto.nome}</Text>
-      <Text style={styles.cardText}>Quantidade: {item.quantidade}</Text>
-      <Text style={styles.cardText}>Origem: {item.origem.nome}</Text>
-      <Text style={styles.cardText}>Destino: {item.destino.nome}</Text>
-      <Text style={styles.cardText}>Status: {item.status}</Text>
-    </View>
-  );
+  const renderMovement = ({ item }: { item: Movement }) => {
+
+    let cardStyle = styles.card;
+
+    if (item.status === 'created') {
+      cardStyle = { ...styles.card, ...styles.awaitingCollection };
+    } else if (item.status === 'em transito') {
+      cardStyle = { ...styles.card, ...styles.inTransit };
+    } else if (item.status === 'Coleta finalizada') {
+      cardStyle = { ...styles.card, ...styles.collectionCompleted };
+    }
+    return (
+      <View style={cardStyle}>
+        {/* Exibir a imagem do produto */}
+        <Image source={{ uri: item.produto.imagem }} style={styles.productImage} />
+        <Text style={styles.cardText}>Produto: {item.produto.nome}</Text>
+        <Text style={styles.cardText}>Quantidade: {item.quantidade}</Text>
+        <Text style={styles.cardText}>Origem: {item.origem.nome}</Text>
+        <Text style={styles.cardText}>Destino: {item.destino.nome}</Text>
+        <Text style={styles.cardText}>Status: {item.status}</Text>
+      </View>
+    )
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -75,8 +87,8 @@ const MovementList = ({ navigation }: any) => {
       <Text style={styles.header}>Movimentações cadastradas</Text>
 
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                <Text style={styles.buttonText}>Logout</Text>
-            </TouchableOpacity>
+        <Text style={styles.buttonText}>Logout</Text>
+      </TouchableOpacity>
 
       <FlatList
         data={movements}
@@ -137,12 +149,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   logoutButton: {
-    backgroundColor: '#26A69A', 
+    backgroundColor: '#26A69A',
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
-    marginVertical: 10, 
-},
+    marginVertical: 10,
+  },
+  awaitingCollection: {
+    backgroundColor: '#D3D3D3',
+  },
+  inTransit: {
+    backgroundColor: '#FFAB91',
+  },
+  collectionCompleted: {
+    backgroundColor: '#81C784',
+  },
 });
 
 export default MovementList;
