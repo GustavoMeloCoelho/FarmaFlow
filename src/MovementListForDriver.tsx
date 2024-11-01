@@ -27,6 +27,11 @@ interface Movement {
 const MovementDriverScreen = ({ navigation }) => {
   const [movements, setMovements] = useState<Movement[]>([]);
   const [userName, setUserName] = useState('');
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('@user_name'); // Limpa o nome do usuário
+    navigation.navigate('Login'); // Navega para a tela de login
+  };
   
   useEffect(() => {
 
@@ -132,6 +137,7 @@ const MovementDriverScreen = ({ navigation }) => {
 
     return (
       <View style={cardStyle}>
+        
         <Image source={{ uri: item.produto.imagem }} style={styles.productImage} />
         <Text style={styles.cardText}>ID: {item.id}</Text>
         <Text style={styles.cardText}>Produto: {item.produto.nome}</Text>
@@ -184,7 +190,9 @@ const MovementDriverScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Movimentações para Motorista</Text>
-
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+                <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity>
       <FlatList
         data={movements}
         renderItem={renderMovement}
@@ -263,6 +271,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
   },
+  logoutButton: {
+    backgroundColor: '#B0BEC5', // Cor do botão de logout
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginVertical: 10, // Margem para separação
+},
 });
 
 export default MovementDriverScreen;

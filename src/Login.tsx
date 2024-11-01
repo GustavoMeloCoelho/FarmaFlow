@@ -64,13 +64,13 @@ export default function Login({navigation}) {
         .then(async (response) => {
             console.log("cai no then")
             if(response.data.profile === "admin") { 
-                Alert.alert("sou um admin");
+                
                 const { name, profile } = response.data;
                 try {
                     await AsyncStorage.setItem('@user_name', name);
                     await AsyncStorage.setItem('@user_profile', profile);
                     console.log("Dados do usuário salvos no AsyncStorage");
-                    Alert.alert("nome: "+name+"profile "+profile);
+                    
                 } catch (e) {
                     console.error("Erro ao salvar dados do usuário", e);
                 }
@@ -84,11 +84,47 @@ export default function Login({navigation}) {
                   );
 
             } 
-            // else if(response.data.profile === 'filial') {
-            //     // navegue tela movimentao
-            // } else {
-            //     // naegue tela movimentacao dos motorista
-            // }
+            else if(response.data.profile === 'filial') {
+                // navegue tela movimentao
+                
+                const { name, profile } = response.data;
+                try {
+                    await AsyncStorage.setItem('@user_name', name);
+                    await AsyncStorage.setItem('@user_profile', profile);
+                    console.log("Dados do usuário salvos no AsyncStorage");
+                    
+                } catch (e) {
+                    console.error("Erro ao salvar dados do usuário", e);
+                }
+
+                
+                navigation.dispatch(
+                    CommonActions.reset({
+                      index: 0,
+                      routes: [{ name: 'MovementList' }],
+                    })
+                  );
+            } else if(response.data.profile === 'motorista'){
+                // navegue tela movimentacao dos motorista
+                
+                const { name, profile } = response.data;
+                try {
+                    await AsyncStorage.setItem('@user_name', name);
+                    await AsyncStorage.setItem('@user_profile', profile);
+                    console.log("Dados do usuário salvos no AsyncStorage");
+                    
+                } catch (e) {
+                    console.error("Erro ao salvar dados do usuário", e);
+                }
+
+               
+                navigation.dispatch(
+                    CommonActions.reset({
+                      index: 0,
+                      routes: [{ name: 'MovementListForDriver' }],
+                    })
+                  );
+            }
         })
         .catch(() => {
             console.log("caiu no catch")

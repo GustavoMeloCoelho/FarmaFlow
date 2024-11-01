@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
-    marginBottom: 80,
+    marginBottom: 40,
     backgroundColor: '#E3F2FD',
   },
   profileImage: {
