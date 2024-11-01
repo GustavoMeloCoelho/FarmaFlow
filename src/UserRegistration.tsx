@@ -12,9 +12,11 @@ export default function UserRegistration() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    
+    const [showPassword, setShowPassword] = useState(false);
 
-    const handleRegister = async() => {
+    const handleRegister = async () => {
+
+
 
         //validações básicas
         if (!name || !document || !full_address || !email || !password || !confirmPassword) {
@@ -24,7 +26,7 @@ export default function UserRegistration() {
         if (password !== confirmPassword) {
             Alert.alert('Erro', 'As senhas não coincidem.');
             return;
-        }   
+        }
 
         //construção do JSON
         const userData = {
@@ -34,9 +36,9 @@ export default function UserRegistration() {
             full_address,
             email,
             password,
-          };
+        };
 
-          try {
+        try {
             // Enviar requisição POST
             await axios.post(process.env.EXPO_PUBLIC_API_URL + '/register', userData);
             Alert.alert('Sucesso', 'Usuário cadastrado com sucesso.');
@@ -46,11 +48,11 @@ export default function UserRegistration() {
             setEmail('');
             setPassword('');
             setConfirmPassword('');
-            
-          } catch (error) {
+
+        } catch (error) {
             Alert.alert('Erro', 'Ocorreu um erro ao cadastrar o usuário.');
             console.error(error);
-          }
+        }
     };
 
 
@@ -115,7 +117,7 @@ export default function UserRegistration() {
                 placeholder="Senha"
                 value={password}
                 onChangeText={setPassword}
-                secureTextEntry
+                secureTextEntry={!showPassword}
             />
             <TextInput
                 style={styles.input}
@@ -123,10 +125,19 @@ export default function UserRegistration() {
                 placeholder="Confirme a senha"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
-                secureTextEntry
+                secureTextEntry={!showPassword}
             />
 
-            <Button title="Cadastrar" onPress={handleRegister} />
+
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                <Text style={styles.showPasswordText}>
+                    {showPassword ? 'Ocultar Senha' : 'Exibir Senha'}
+                </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.button} onPress={() => handleRegister()}>
+                <Text style={styles.buttonText}>Adicionar Novo Usuário</Text>
+            </TouchableOpacity>
         </View>
     );
 }
@@ -157,11 +168,11 @@ const styles = StyleSheet.create({
         borderColor: '#ccc'
     },
     selected: {
-        backgroundColor: '#A5D6A7', 
+        backgroundColor: '#A5D6A7',
     },
     unselected: {
-        backgroundColor: '#F5F5F5', 
-        
+        backgroundColor: '#F5F5F5',
+
     },
     toggleText: {
         color: 'black',
@@ -170,5 +181,22 @@ const styles = StyleSheet.create({
         height: 45,
         padding: 5,
         marginBottom: 20,
+    },
+    showPasswordText: {
+
+        color: '#1A237E',
+        // color: '#1565C0',
+        // textAlign: 'right',
+    },
+    button: {
+        backgroundColor: '#1565C0',
+        padding: 16,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginTop: 16,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
     },
 });
