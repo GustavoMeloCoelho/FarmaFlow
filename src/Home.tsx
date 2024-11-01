@@ -19,13 +19,20 @@ export default function Home({ navigation }) {
         fetchUserName();
     }, []);
 
+    const handleLogout = async () => {
+        await AsyncStorage.removeItem('@user_name'); // Limpa o nome do usuário
+        navigation.navigate('Login'); // Navega para a tela de login
+    };
+
     return (
         <SafeAreaView style={styles.container}>
     
 
             <Header imageUrl='https://i.pinimg.com/originals/8d/fd/37/8dfd372102d3e4a8102c5c928ce32047.jpg' />
 
-
+            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+                <Text style={styles.buttonText}>Logout</Text>
+            </TouchableOpacity>
 
             {/* Cards de Estoque e Usuários */}
             <View style={styles.cardsContainer}>
@@ -102,5 +109,13 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontSize: 14,
         fontWeight: 'bold',
+    },
+    logoutButton: {
+        backgroundColor: '#B0BEC5', // Cor do botão de logout
+        paddingVertical: 10,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginBottom: 30, // Margem para separação
+
     },
 });

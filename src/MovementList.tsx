@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 import Header from '../components/Header'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Movement {
   id: number;
@@ -28,6 +29,11 @@ interface Movement {
 
 const MovementList = ({ navigation }) => {
   const [movements, setMovements] = useState<Movement[]>([]);
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('@user_name'); // Limpa o nome do usuário
+    navigation.navigate('Login'); // Navega para a tela de login
+  };
 
   // Fetch movements on screen load
   useFocusEffect(
@@ -67,6 +73,10 @@ const MovementList = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <Text style={styles.header}>Movimentações cadastradas</Text>
+
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+                <Text style={styles.buttonText}>Logout</Text>
+            </TouchableOpacity>
 
       <FlatList
         data={movements}
@@ -123,8 +133,15 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
   },
+  logoutButton: {
+    backgroundColor: '#B0BEC5', // Cor do botão de logout
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginVertical: 10, // Margem para separação
+},
 });
 
 export default MovementList;

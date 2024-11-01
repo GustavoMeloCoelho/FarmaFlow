@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Branch {
   id: number;
@@ -29,6 +30,7 @@ const MovementRegistration = ({ navigation }) => {
 
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
+
   // Fetch branches and products on screen load
   useEffect(() => {
     const fetchOptions = async () => {
@@ -44,7 +46,7 @@ const MovementRegistration = ({ navigation }) => {
     fetchOptions();
   }, []);
 
- 
+
   useEffect(() => {
     if (selectedProduct) {
       const product = products.find(p => p.product_id === Number(selectedProduct));
@@ -55,14 +57,14 @@ const MovementRegistration = ({ navigation }) => {
   //Filtra o picker de produto para conter apenas os produtos que tem naquela filial
   useEffect(() => {
     if (originBranch !== null) {
-      const productsInBranch = products.filter(product => 
-        branches.find(branch => branch.id === originBranch)?.name === product.branch_name 
+      const productsInBranch = products.filter(product =>
+        branches.find(branch => branch.id === originBranch)?.name === product.branch_name
       );
-      setFilteredProducts(productsInBranch); 
-      setSelectedProduct(null); 
-      setProductStock(0);        
+      setFilteredProducts(productsInBranch);
+      setSelectedProduct(null);
+      setProductStock(0);
     }
-  }, [originBranch, products, branches]); 
+  }, [originBranch, products, branches]);
 
   // Validation and submit handler
   const handleRegister = async () => {
@@ -86,7 +88,7 @@ const MovementRegistration = ({ navigation }) => {
         quantity: parseInt(quantity),
       };
 
-      console.log('Payload being sent:', payload); 
+      console.log('Payload being sent:', payload);
       await axios.post(process.env.EXPO_PUBLIC_API_URL + '/movements', payload);
       Alert.alert('Sucesso', 'Movimentação cadastrada com sucesso.');
       // Atualiza o estoque disponível após cadastro de movimentação bem-sucedida
@@ -104,6 +106,7 @@ const MovementRegistration = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+
       <Text style={styles.label}>Filial de Origem</Text>
       <Picker
         selectedValue={originBranch}
@@ -121,8 +124,8 @@ const MovementRegistration = ({ navigation }) => {
         selectedValue={destinationBranch}
         onValueChange={(itemValue) => setDestinationBranch(itemValue as number)}
         style={styles.picker}
-        
-      > 
+
+      >
         <Picker.Item label="Selecione uma filial de destino" value={null} />
         {branches.map(branch => (
           <Picker.Item key={branch.id.toString()} label={branch.name} value={branch.id} />
@@ -135,7 +138,7 @@ const MovementRegistration = ({ navigation }) => {
         onValueChange={itemValue => setSelectedProduct(itemValue)}
         style={styles.picker}
       >
-        
+
         {filteredProducts.map(product => (
           <Picker.Item key={product.product_id.toString()} label={product.product_name} value={product.product_id} />
         ))}
@@ -187,6 +190,11 @@ const styles = StyleSheet.create({
   },
   textArea: {
     height: 100,
+  },
+
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
 
