@@ -48,7 +48,7 @@ export default function Home({ navigation }:any) {
                     <TouchableOpacity
                         style={styles.cardButton}
                         onPress={() => navigation.navigate('Stock')}>
-                        <Text style={styles.buttonText}>Ir para Estoque</Text>
+                        <Text style={styles.buttonText}>Ir Para Estoque</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -62,7 +62,7 @@ export default function Home({ navigation }:any) {
                     <TouchableOpacity
                         style={styles.cardButton}
                         onPress={() => navigation.navigate('UserList')}>
-                        <Text style={styles.buttonText}>Ver e cadastrar Usuários</Text>
+                        <Text style={styles.buttonText}>Ver e Cadastrar Usuários</Text>
                     </TouchableOpacity>
                 </View>
             </View>
