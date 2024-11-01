@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TextInput, StyleSheet, Image, Alert } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Image, Alert } from 'react-native';
 import axios from 'axios';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { TextInput } from 'react-native-paper';
 
 interface Product {
   image_url: string;
   product_name: string;
-  branch_name: string; // Nome da filial
-  quantity: number; // Quantidade disponível na filial
+  branch_name: string; 
+  quantity: number; 
 }
 
 export default function Stock() {
@@ -55,9 +56,13 @@ export default function Stock() {
 
   return (
     <SafeAreaView style={styles.container}>
+
+      <Text style={styles.titleText}>Lista de produtos</Text>
+
       {/* Campo de pesquisa */}
       <TextInput
         style={styles.searchInput}
+        mode="outlined"
         placeholder="Pesquisar produto..."
         value={search}
         onChangeText={handleSearch}
@@ -123,4 +128,11 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 20,
   },
+  titleText: {
+    fontSize: 29,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#1565C0',
+    marginVertical: 20,
+},
 });

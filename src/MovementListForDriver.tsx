@@ -24,7 +24,7 @@ interface Movement {
 
 
 
-const MovementDriverScreen = ({ navigation }) => {
+const MovementDriverScreen = ({ navigation }:any) => {
   const [movements, setMovements] = useState<Movement[]>([]);
   const [userName, setUserName] = useState('');
 
@@ -236,10 +236,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#81C784', 
   },
   productImage: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     resizeMode: 'contain',
-    marginBottom: 8,
+    marginVertical: 12,
+    alignSelf: 'center',
   },
   cardText: {
     fontSize: 16,
@@ -272,11 +273,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   logoutButton: {
-    backgroundColor: '#B0BEC5', // Cor do botão de logout
+    backgroundColor: '#26A69A', 
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
-    marginVertical: 10, // Margem para separação
+    marginVertical: 10, 
 },
 });
 

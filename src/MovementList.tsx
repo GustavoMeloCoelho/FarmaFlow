@@ -27,7 +27,7 @@ interface Movement {
   dataCriacao: string;
 }
 
-const MovementList = ({ navigation }) => {
+const MovementList = ({ navigation }: any) => {
   const [movements, setMovements] = useState<Movement[]>([]);
 
   const handleLogout = async () => {
@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: '#E3F2FD',
   },
   header: {
     fontSize: 24,
@@ -136,11 +137,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   logoutButton: {
-    backgroundColor: '#B0BEC5', // Cor do botão de logout
+    backgroundColor: '#26A69A', 
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
-    marginVertical: 10, // Margem para separação
+    marginVertical: 10, 
 },
 });
 

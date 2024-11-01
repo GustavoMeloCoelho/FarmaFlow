@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Button, StyleSheet, Alert } from 'react-n
 import { TextInput } from 'react-native-paper';
 import axios from 'axios';
 
+
 export default function UserRegistration() {
     const [profile, setProfile] = useState('motorista');
     const [name, setName] = useState('');
@@ -11,6 +12,7 @@ export default function UserRegistration() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    
 
     const handleRegister = async() => {
 
@@ -79,12 +81,14 @@ export default function UserRegistration() {
             {/* Formulário de cadastro */}
             <TextInput
                 style={styles.input}
+                mode="outlined"
                 placeholder="Nome completo"
                 value={name}
                 onChangeText={setName}
             />
             <TextInput
                 style={styles.input}
+                mode="outlined"
                 placeholder={profile === 'motorista' ? 'CPF' : 'CNPJ'}
                 value={document}
                 onChangeText={setDocument}
@@ -92,12 +96,14 @@ export default function UserRegistration() {
             />
             <TextInput
                 style={styles.input}
+                mode="outlined"
                 placeholder="Endereço completo"
                 value={full_address}
                 onChangeText={setFullAddress}
             />
             <TextInput
                 style={styles.input}
+                mode="outlined"
                 placeholder="Email"
                 value={email}
                 onChangeText={setEmail}
@@ -105,6 +111,7 @@ export default function UserRegistration() {
             />
             <TextInput
                 style={styles.input}
+                mode="outlined"
                 placeholder="Senha"
                 value={password}
                 onChangeText={setPassword}
@@ -112,6 +119,7 @@ export default function UserRegistration() {
             />
             <TextInput
                 style={styles.input}
+                mode="outlined"
                 placeholder="Confirme a senha"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
@@ -127,13 +135,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 25,
+        backgroundColor: '#E3F2FD',
     },
     titleText: {
         fontSize: 29,
         fontWeight: 'bold',
         textAlign: 'center',
-        color: '#2E7D32',
-        marginVertical: 40,
+        color: '#1565C0',
+        marginVertical: 50,
     },
     toggleContainer: {
         flexDirection: 'row',
@@ -148,7 +157,7 @@ const styles = StyleSheet.create({
         borderColor: '#ccc'
     },
     selected: {
-        backgroundColor: '#2E7D32', 
+        backgroundColor: '#A5D6A7', 
     },
     unselected: {
         backgroundColor: '#F5F5F5', 
@@ -159,7 +168,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 45,
-        padding: 4,
-        marginBottom: 10,
+        padding: 5,
+        marginBottom: 20,
     },
 });

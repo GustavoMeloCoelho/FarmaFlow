@@ -93,12 +93,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
+        backgroundColor: '#E3F2FD'
     },
     addButton: {
         backgroundColor: '#1565C0',
         padding: 10,
         borderRadius: 5,
-        marginBottom: 16,
+        marginVertical: 30,
         alignItems: 'center',
     },
     addButtonText: {
@@ -118,6 +119,7 @@ const styles = StyleSheet.create({
     },
     activeCard: {
         borderColor: '#2E7D32',
+        backgroundColor: '#C8E6C9'
     },
     inactiveCard: {
         backgroundColor: '#FFCDD2',
