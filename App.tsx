@@ -11,10 +11,14 @@ import MovementRegistration from './src/MovementRegistration';
 import MovementList from './src/MovementList';
 import MovementListForDriver from './src/MovementListForDriver';
 import MapScreen from './src/MapScreen';
+import { RootStackParamList } from './src/types';
 
-const Stack = createStackNavigator()
+const Stack = createStackNavigator<RootStackParamList>();
 
 
+// const Stack = createStackNavigator()
+
+ 
 export default function App() {
   return (
     <PaperProvider>

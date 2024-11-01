@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginVertical: 21,
+    marginVertical: 16,
     color: '#1565C0',
   },
   label: {
@@ -195,14 +195,14 @@ const styles = StyleSheet.create({
   },
   picker: {
     height: 50,
-    marginBottom: 16,
+    marginBottom: 12,
     backgroundColor: 'white',
   },
   input: {
     height: 40,
     borderColor: '#ccc',
     borderWidth: 1,
-    marginBottom: 16,
+    marginBottom: 14,
     paddingHorizontal: 8,
   },
   textArea: {
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
-    marginTop: 16,
+    marginTop: 10,
   },
   buttonText: {
     color: '#fff',
